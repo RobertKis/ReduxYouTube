@@ -14,15 +14,29 @@ class SearchBar extends React.Component{
     render(){
         console.log("render SB: " + this.state.term);
         return(
-            <form onSubmit={this.onSubmitForm} className="input-group">
-                <input id="SearchBar" type="text" 
-                placeholder="Enter search term"
-                className="form-control"
-                value={this.state.term}
-                onChange={this.oninputChange.bind(this)}/>
-                <span className="input-group-btn">
+            /*<form onSubmit={this.onSubmitForm}>
+                <div className="search-bar">
+                    <input id="SearchBar" type="text" 
+                    placeholder="Enter search term"
+                    value={this.state.term}
+                    onChange={this.oninputChange.bind(this)}/>
                     <button type="submit" className="btn btn-secondary">submit </button>   
-                </span>
+                </div>
+            </form>*/
+            <form onSubmit={this.onSubmitForm}>
+              <div class="col-lg-10">
+                    <div className="input-group">
+                        <input type="text" 
+                        id="SearchBar" 
+                        className="form-control" 
+                        placeholder="Search for..."
+                        value={this.state.term}
+                        onChange={this.oninputChange.bind(this)} />
+                        <span class="input-group-btn">
+                            <button className="btn btn-default" type="submit">Go!</button>
+                        </span>
+                    </div>
+               </div>
             </form>
         );
     }
