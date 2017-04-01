@@ -14,17 +14,8 @@ class SearchBar extends React.Component{
     render(){
         console.log("render SB: " + this.state.term);
         return(
-            /*<form onSubmit={this.onSubmitForm}>
-                <div className="search-bar">
-                    <input id="SearchBar" type="text" 
-                    placeholder="Enter search term"
-                    value={this.state.term}
-                    onChange={this.oninputChange.bind(this)}/>
-                    <button type="submit" className="btn btn-secondary">submit </button>   
-                </div>
-            </form>*/
             <form onSubmit={this.onSubmitForm}>
-              <div class="col-lg-10">
+              <div className="col-lg-10">
                     <div className="input-group">
                         <input type="text" 
                         id="SearchBar" 
@@ -32,7 +23,7 @@ class SearchBar extends React.Component{
                         placeholder="Search for..."
                         value={this.state.term}
                         onChange={this.oninputChange.bind(this)} />
-                        <span class="input-group-btn">
+                        <span>
                             <button className="btn btn-default" type="submit">Go!</button>
                         </span>
                     </div>

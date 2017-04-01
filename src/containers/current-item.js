@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 
 class CurrentItem extends React.Component{
     render(){
-        if(!this.props.selectedVideo){
-		    return <div>Loading...</div>;
+        console.log("test")
+        if(!this.props.selectedVideo && this.props.videoList){
+            return <div>waiting for video selection</div>;
 	    }
 
         const videoId = this.props.selectedVideo.id.videoId;
@@ -28,7 +29,7 @@ function mapStateToProps(state){
     console.log("map: ");
     console.log(state.selectedVideo);
 
-    return {selectedVideo: state.selectedVideo}
+    return {selectedVideo: state.selectedVideo, videoList: state.videoList}
 }
 
 export default connect(mapStateToProps)(CurrentItem);
