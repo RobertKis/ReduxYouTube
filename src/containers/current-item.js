@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 
 class CurrentItem extends React.Component{
     render(){
-        console.log("test")
+        if(this.props.videoList.length == 0){
+            return <div></div>;
+        }
         if(!this.props.selectedVideo && this.props.videoList){
-            return <div>waiting for video selection</div>;
+            return <div style={{"clear": "both"}}>waiting for video selection</div>;
 	    }
 
-        const videoId = this.props.selectedVideo.id.videoId;
+        var videoId;
+
+        videoId = this.props.selectedVideo.id.videoId;
         const url = 'https://www.youtube.com/embed/' + videoId;
         const title = this.props.selectedVideo.title; 
 
@@ -26,10 +30,9 @@ class CurrentItem extends React.Component{
 }
 
 function mapStateToProps(state){
-    console.log("map: ");
-    console.log(state.selectedVideo);
-
-    return {selectedVideo: state.selectedVideo, videoList: state.videoList}
+    return {selectedVideo: state.selectedVideo, 
+            videoList: state.videoList,
+            searchMethod: state.searchSettings}
 }
 
 export default connect(mapStateToProps)(CurrentItem);

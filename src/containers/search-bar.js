@@ -12,7 +12,6 @@ class SearchBar extends React.Component{
    }
    
     render(){
-        console.log("render SB: " + this.state.term);
         return(
             <form onSubmit={this.onSubmitForm}>
               <div className="col-lg-10">
@@ -33,19 +32,27 @@ class SearchBar extends React.Component{
     }
 
     oninputChange(event){
-        console.log("input change: ")
         this.setState({term: event.target.value});
     }
 
     onSubmitForm(event){
         event.preventDefault();
-        this.props.fetchVideos(this.state.term);
+        this.props.fetchVideos(this.state.term, 
+        this.props.searchMethod, 
+        this.props.categorySearch,
+        this.props.categoryValue);
         this.setState({term: ''});
     }
+}
+
+function mapStateToProps(state){
+    return {searchMethod: state.searchSettings, 
+        categorySearch: state.categorySearch,
+        categoryValue: state.categoryValue}
 }
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({fetchVideos}, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(SearchBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
