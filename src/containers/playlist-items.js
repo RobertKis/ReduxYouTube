@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setCurrent } from '../actions/index';
-import { fetchPlaylistItems } from '../actions/index';
+import Radium from 'radium';
 
+@Radium
 class VideoList extends React.Component {
   renderVideos(VideoItem) {
     return (
@@ -19,24 +20,20 @@ class VideoList extends React.Component {
   }
 
   render() {
-    const { videos } = this.props;
-    if (this.props.videos.length == 0 && this.props.categorySearch) {
-      return <div style={{ "clear": "both" }}>No items to display</div>;
-    }
     return (
       <ul className="col-md-4 list-group">
-        {videos.map(this.renderVideos.bind(this))}
+        {this.props.videos.map(this.renderVideos.bind(this))}
       </ul>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { videos: state.videoList.receivedList, categorySearch: state.categorySearch }
+  return { videos: state.videoList.videoList }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchPlaylistItems, setCurrent }, dispatch);
+  return bindActionCreators({ setCurrent }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoList);
