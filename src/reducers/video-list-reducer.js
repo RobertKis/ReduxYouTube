@@ -1,13 +1,17 @@
-import { FETCH_VIDEOS } from '../actions/index';
-import { FETCH_PLAYLIST } from '../actions/index';
+import * as actions from '../actions/index';
+import { Record } from 'immutable';
 
-export default function(state = [], action){
-    switch(action.type)
+export const InitialState = Record({
+    receivedList: []
+});
+const initialState = new InitialState;
+
+export default function videoListReducer(state = initialState, action){
+    if(!(state instanceof InitialState)) return initialState.mergeDeep(state);
+    if(action.type === actions.FETCH_VIDEOS)
     {
-        case FETCH_VIDEOS:
-            return action.payload.data.items;
-        case FETCH_PLAYLIST:
-            return action.payload.data.items;
+        const { receivedList } = action.payload;
+        return state.set('receivedList', receivedList.data.items);
     }
     return state;
 }
