@@ -1,13 +1,18 @@
 import { SELECT_VIDEO } from '../actions/index';
+import { Record } from 'immutable';
 
-export default function(state= null, action){
-    console.log("action");
-    console.log(action.type);
-    if(action.type === SELECT_VIDEO)
-    {
-        console.log("true");
-        return action.payload;
-    }
-    console.log("false")
-    return state;
+export const InitialState = Record({
+  current: null
+});
+const initialState = new InitialState;
+
+export default function (state = initialState, action) {
+  if (!(state instanceof InitialState)) return initualState.mergeDeep(state);
+
+  if (action.type === SELECT_VIDEO) {
+    const { current } = action.payload;
+    return state.set('current', current);
+  }
+
+  return state;
 }

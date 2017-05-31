@@ -2,50 +2,69 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchVideos } from '../actions/index';
+import Radium from 'radium';
 
-class SearchBar extends React.Component{
-   constructor(props){
-       super(props);
+@Radium
+@connect(
+  ({ category, searchSettings }) => ({
+    categoryValue: category.get('value'),
+    isChecked: category.get('isChecked'),
+    searchMethod: searchSettings.get('videoLength')
+  }),
+  dispatch => bindActionCreators({ fetchVideos }, dispatch)
+)
 
-       this.state = {term: 'House'};
-       this.onSubmitForm = this.onSubmitForm.bind(this);
-   }
-   
-    render(){
-        console.log("render SB: " + this.state.term);
-        return(
-            <form onSubmit={this.onSubmitForm}>
-              <div className="col-lg-10">
-                    <div className="input-group">
-                        <input type="text" 
-                        id="SearchBar" 
-                        className="form-control" 
-                        placeholder="Search for..."
-                        value={this.state.term}
-                        onChange={this.oninputChange.bind(this)} />
-                        <span>
-                            <button className="btn btn-default" type="submit">Go!</button>
-                        </span>
-                    </div>
-               </div>
-            </form>
-        );
-    }
+export default class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-    oninputChange(event){
-        console.log("input change: ")
-        this.setState({term: event.target.value});
-    }
+    this.state = { term: '' };
+    this.onSubmitForm = this.onSubmitForm.bind(this);
+  }
 
-    onSubmitForm(event){
-        event.preventDefault();
-        this.props.fetchVideos(this.state.term);
-        this.setState({term: ''});
-    }
+  oninputChange(event) {
+    this.setState({ term: event.target.value });
+  }
+
+  onSubmitForm(event) {
+    event.preventDefault();
+    const { fetchVideos, searchMethod, isChecked, categoryValue } = this.props;
+    const { term } = this.state;
+    console.log("searchmethod")
+    console.log(searchMethod)
+    fetchVideos(term, searchMethod, isChecked, categoryValue);
+    this.setState({ term: '' });
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.onSubmitForm}>
+        <div className="col-lg-10">
+          <div className="input-group">
+            <input type="text"
+              id="SearchBar"
+              className="form-control"
+              placeholder="Search for..."
+              value={this.state.term}
+              onChange={this.oninputChange.bind(this)} />
+            <span style={styles.submitButton}>
+              <button className="btn btn-default" type="submit">Go!</button>
+            </span>
+          </div>
+        </div>
+      </form>
+    );
+  }
 }
 
-function mapDispatchToProps(dispatch){
-    return bindActionCreators({fetchVideos}, dispatch);
+const styles = {
+  submitButton: {
+    background: 'red',
+    ':hover': {
+      background: 'green !important'
+    },
+    '@media (minWidth: 500px)': {
+      background: 'purple !important'
+    }
+  }
 }
-
-export default connect(null, mapDispatchToProps)(SearchBar);
