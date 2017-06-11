@@ -1,20 +1,36 @@
-import React from 'react';
+import Radium from 'radium';
+import React, {PropTypes as RPT} from 'react';
 import { connect } from 'react-redux';
 
-class CurrentItem extends React.Component {
+@Radium
+@connect(
+  ({ selectedVideo, videoList }) => ({
+    selectedVideo: selectedVideo.get('current'),
+    videoList: videoList.get('receivedList')
+  })
+)
+
+export default class CurrentItem extends React.Component {
+
+  static propTypes = {
+    selectedVideo: RPT.object,
+    videoList: RPT.array
+  }
+
   render() {
-    if (this.props.videoList.length == 0) {
-      return <div></div>;
+    const {selectedVideo, videoList} = this.props;
+    if (videoList && videoList.length == 0) {
+      return <div/>;
     }
-    if (!this.props.selectedVideo && this.props.videoList) {
+
+    //Show message only if the list is present
+    if (!selectedVideo && videoList) {
       return <div style={{ "clear": "both" }}>waiting for video selection</div>;
     }
 
-    var videoId;
-
-    videoId = this.props.selectedVideo.id.videoId;
+    const videoId = selectedVideo.id.videoId;
     const url = 'https://www.youtube.com/embed/' + videoId;
-    const title = this.props.selectedVideo.title;
+    const title = selectedVideo.title;
 
     return (
       <div className="video-detail col-md-8">
@@ -29,11 +45,3 @@ class CurrentItem extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    selectedVideo: state.selectedVideo.current,
-    videoList: state.videoList.receivedList
-  }
-}
-
-export default connect(mapStateToProps)(CurrentItem);

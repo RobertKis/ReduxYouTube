@@ -1,10 +1,17 @@
+import categories from '../category-items';
+import Radium from 'radium';
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { setSearchMethod, setCategorySearch, setCategoryValue } from '../actions/index';
 import { autobind } from 'core-decorators';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { setSearchMethod, setCategorySearch, setCategoryValue } from '../actions/index';
 
-class SettingsBar extends React.Component {
+@connect(
+  ({ }) => ({ }),
+  dispatch => bindActionCreators({ setSearchMethod, setCategorySearch, setCategoryValue }, dispatch)
+)
+
+export default class SettingsBar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,52 +29,65 @@ class SettingsBar extends React.Component {
         selectedCategory: 15
       }
     }
-
-    this.setFilter = this.setFilter.bind(this);
   }
 
+  @autobind
   setFilter(event) {
     const { target: { id } } = event;
-    if (event.target.id === "long") {
-      if (!this.state.long.isChecked) {
-        this.setState({ short: { isChecked: !this.state.short.isChecked } });
-        this.setState({ long: { isChecked: !this.state.long.isChecked } });
-        this.props.setSearchMethod(event.target.id);
-      }
-    } else if (event.target.id === "short") {
-      if (!this.state.short.isChecked) {
-        this.setState({ short: { isChecked: !this.state.short.isChecked } });
-        this.setState({ long: { isChecked: !this.state.long.isChecked } });
-        this.props.setSearchMethod(event.target.id);
-      }
+    const { short, long } = this.state;
+    const { setSearchMethod } = this.props;
+
+    if (id) {
+      this.setState({ short: { isChecked: !short.isChecked } });
+      this.setState({ long: { isChecked: !long.isChecked } });
+      setSearchMethod(id);
     }
   }
 
   @autobind
   setCategorySearch(event) {
-    this.setState({ categorySearch: { isChecked: !this.state.categorySearch.isChecked } });
-    this.props.setCategorySearch(!this.state.categorySearch.isChecked);
+    const { categorySearch } = this.state;
+    const { setCategorySearch } = this.props;
+
+    this.setState({ categorySearch: { isChecked: !categorySearch.isChecked } });
+    setCategorySearch(!categorySearch.isChecked);
   }
 
+ @autobind
   handleSelectList(event) {
+    const { target: { value } } = event;
+    const { categorySearch } = this.state;
+    const { setCategoryValue } = this.props;
+
     this.setState({
       categorySearch: {
-        selectedCategory: event.target.value,
-        isChecked: this.state.categorySearch.isChecked
+        selectedCategory: value,
+        isChecked: categorySearch.isChecked
       }
     })
-    console.log(event.target.value);
-    this.props.setCategoryValue(event.target.value);
+    setCategoryValue(value);
   }
 
+@autobind
+populateSelectList(selectListItem){
+  console.log(selectListItem)
+  return(
+    <option key={selectListItem.id} value={selectListItem.id}>
+      {selectListItem.value}
+    </option>
+  );
+}
+
   render() {
+    const {categorySearch, long, short} = this.state;
+
     return (
       <div id="searchBar" className="col-lg-12">
         <div className="input-group">
           <span className="input-group-addon">
             <input type="checkbox"
               aria-label="..."
-              checked={this.state.categorySearch.isChecked}
+              checked={categorySearch.isChecked}
               onChange={this.setCategorySearch} />
           </span>
           <input type="text"
@@ -78,41 +98,12 @@ class SettingsBar extends React.Component {
         <div id="selectCategory">
           <div className="input-group">
             Category
-                            <select value="Select category"
-              value={this.state.categorySearch.selectedCategory}
-              onChange={this.handleSelectList.bind(this)}>
-              <option value="1">Film & Animation</option>
-              <option value="2">Autos & Vehicles</option>
-              <option value="10">Music</option>
-              <option value="15">Pets & Music </option>
-              <option value="17">Sports</option>
-              <option value="18">Short & Movies</option>
-              <option value="19">Travel & Events</option>
-              <option value="20">Gaming</option>
-              <option value="21">Videoblogging</option>
-              <option value="22">People & Blogs</option>
-              <option value="23">Comedy</option>
-              <option value="24">Entertainment</option>
-              <option value="25">News & Politics</option>
-              <option value="26">Howto & Style</option>
-              <option value="27">Education</option>
-              <option value="28">Science & Technology</option>
-              <option value="29">Nonprofits & Activism</option>
-              <option value="30">Movies</option>
-              <option value="31">Anime/Animation</option>
-              <option value="32">Action/Adventure</option>
-              <option value="33">Classics</option>
-              <option value="34">Comedy</option>
-              <option value="35">Documentary</option>
-              <option value="36">Drama</option>
-              <option value="37">Family</option>
-              <option value="38">Foreign</option>
-              <option value="39">Horror</option>
-              <option value="40">Sci-Fi/Fantasy</option>
-              <option value="41">Thriller</option>
-              <option value="42">Shorts</option>
-              <option value="43">Shows</option>
-              <option value="44">Trailers</option>
+            <select id="CategorySelectList" value="Select category"
+              value={categorySearch.selectedCategory}
+              onChange={this.handleSelectList}>   
+              {
+                categories.map(this.populateSelectList)
+              }           
             </select>
           </div>
         </div>
@@ -122,8 +113,8 @@ class SettingsBar extends React.Component {
               aria-label=""
               name="search-method"
               id="long"
-              checked={this.state.long.isChecked}
-              onChange={this.setFilter.bind(this)} />
+              checked={long.isChecked}
+              onChange={this.setFilter} />
           </span>
           <input type="text"
             value="Long videos"
@@ -136,21 +127,15 @@ class SettingsBar extends React.Component {
               aria-label=""
               id="short"
               name="search-method"
-              checked={this.state.short.isChecked}
+              checked={short.isChecked}
               onChange={this.setFilter} />
           </span>
           <input type="text"
             value="Short videos"
             className="form-control"
             aria-label="Short videos" />
-        </div>
+        </div>        
       </div>
     );
   }
 }
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ setSearchMethod, setCategorySearch, setCategoryValue }, dispatch);
-}
-
-export default connect(null, mapDispatchToProps)(SettingsBar);

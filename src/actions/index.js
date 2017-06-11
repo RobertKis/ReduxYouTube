@@ -11,39 +11,18 @@ const API_KEY = 'AIzaSyCQOrCyZMNUT9PwPes5AJUyn1kopJm2xU8';
 const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/search';
 const YOUTUBE_URL_PLIST = 'https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.playlists.list'
 
-export function fetchVideos(keyword, searchMethod, categorySearch, categoryValue) {
+export function fetchVideos(keyword, duration = 'long', categorySearch, categoryValue) {
   var params;
-  if (searchMethod && searchMethod === "short") {
-    console.log("short videos")
+
     params = {
       part: 'snippet',
       key: API_KEY,
       q: keyword,
       type: 'video',
-      videoDuration: 'short'
+      videoDuration: duration
     }
-  } else if (searchMethod && searchMethod === "long") {
-    console.log(2)
-    params = {
-      part: 'snippet',
-      key: API_KEY,
-      q: keyword,
-      videoDuration: 'long',
-      type: 'video'
-    }
-  } else {
-    console.log(3)
-    console.log(searchMethod)
-    params = {
-      part: 'snippet',
-      key: API_KEY,
-      q: keyword,
-      videoDuration: 'long',
-      type: 'video'
-    }
-  }
 
-  if (categorySearch === true) {
+  if (categorySearch) {
     params["videoCategoryId"] = categoryValue;
   };
 
