@@ -12,7 +12,7 @@ const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/search';
 const YOUTUBE_URL_PLIST = 'https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.playlists.list'
 
 export function fetchVideos(keyword, duration = 'long', categorySearch, categoryValue) {
-  var params;
+  let params;
 
     params = {
       part: 'snippet',

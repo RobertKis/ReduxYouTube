@@ -34,7 +34,7 @@ export default class VideoList extends React.Component {
   render() {
     const { videos } = this.props;
     if (videos && videos.length === 0) {
-      return <div style={{ "clear": "both" }}>No items to display</div>;
+      return <div id="videoListItems">No items to display</div>;
     }
     return (
       <ul className="col-md-4 list-group">

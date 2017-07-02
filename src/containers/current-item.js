@@ -25,11 +25,11 @@ export default class CurrentItem extends React.Component {
 
     //Show message only if the list is present
     if (!selectedVideo && videoList) {
-      return <div style={{ "clear": "both" }}>waiting for video selection</div>;
+      return <div id="currentItem">waiting for video selection</div>;
     }
 
     const videoId = selectedVideo.id.videoId;
-    const url = 'https://www.youtube.com/embed/' + videoId;
+    const url = `https://www.youtube.com/embed/${videoId}`;
     const title = selectedVideo.title;
 
     return (

@@ -1,5 +1,4 @@
 import categories from '../category-items';
-import Radium from 'radium';
 import React from 'react';
 import { autobind } from 'core-decorators';
 import { bindActionCreators } from 'redux';
@@ -70,7 +69,6 @@ export default class SettingsBar extends React.Component {
 
 @autobind
 populateSelectList(selectListItem){
-  console.log(selectListItem)
   return(
     <option key={selectListItem.id} value={selectListItem.id}>
       {selectListItem.value}
