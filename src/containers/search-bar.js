@@ -1,4 +1,5 @@
 import React from 'react';
+import { autobind } from 'core-decorators';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchVideos } from '../actions/index';
@@ -19,19 +20,18 @@ export default class SearchBar extends React.Component {
     super(props);
 
     this.state = { term: '' };
-    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   oninputChange(event) {
     this.setState({ term: event.target.value });
   }
 
+  @autobind
   onSubmitForm(event) {
     event.preventDefault();
     const { fetchVideos, searchMethod, isChecked, categoryValue } = this.props;
     const { term } = this.state;
-    console.log("searchmethod")
-    console.log(searchMethod)
+
     fetchVideos(term, searchMethod, isChecked, categoryValue);
     this.setState({ term: '' });
   }
@@ -68,3 +68,5 @@ const styles = {
     }
   }
 }
+
+

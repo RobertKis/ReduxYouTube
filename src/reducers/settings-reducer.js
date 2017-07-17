@@ -8,7 +8,7 @@ const initialState = new InitialState;
 
 export default function settingsReducer(state = initialState, action) {
   if (!(state instanceof InitialState)) return initialState.mergeDeep(state);
-  console.log("test2")
+  
   switch (action.type) {
     case actions.SEARCH_METHOD: {
       const { videoLength } = action.payload;
